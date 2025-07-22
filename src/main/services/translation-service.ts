@@ -3,6 +3,7 @@ import type {
   TranslationRequest,
   TranslationResponse,
 } from "../../shared/domain/translation.js";
+import { getLanguageName } from "../../shared/domain/translation.js";
 import type { TranslationSettingsRepository } from "../repository/translation-settings-repository.js";
 import type { OllamaService } from "./ollama-service.js";
 
@@ -174,13 +175,8 @@ export class TranslationServiceImpl implements TranslationService {
     sourceLanguage: SupportedLanguage,
     targetLanguage: SupportedLanguage,
   ): string {
-    const languageNames = {
-      ja: "Japanese",
-      en: "English",
-    };
-
-    const sourceName = languageNames[sourceLanguage];
-    const targetName = languageNames[targetLanguage];
+    const sourceName = getLanguageName(sourceLanguage);
+    const targetName = getLanguageName(targetLanguage);
 
     return `Translate the following ${sourceName} text to ${targetName}:
 

@@ -1,4 +1,8 @@
 import type { SupportedLanguage } from "#shared/domain/translation";
+import {
+  getLanguageDisplayName,
+  LANGUAGE_CONFIG,
+} from "#shared/domain/translation";
 import type { JSX } from "react";
 import { useTranslationStore } from "../../stores/translation-store";
 import {
@@ -31,12 +35,15 @@ export function LanguageSelector({ type }: LanguageSelectorProps): JSX.Element {
       >
         <SelectTrigger className="text-muted-foreground h-8 border-0 text-sm font-medium shadow-none focus:ring-0">
           <SelectValue>
-            {manualSourceLanguage === "ja" ? "Japanese" : "English"}
+            {getLanguageDisplayName(manualSourceLanguage)}
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="en">English</SelectItem>
-          <SelectItem value="ja">Japanese</SelectItem>
+          {Object.entries(LANGUAGE_CONFIG).map(([code, config]) => (
+            <SelectItem key={code} value={code}>
+              {config.displayName}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     );
@@ -52,12 +59,15 @@ export function LanguageSelector({ type }: LanguageSelectorProps): JSX.Element {
     >
       <SelectTrigger className="text-muted-foreground h-8 border-0 text-sm font-medium shadow-none focus:ring-0">
         <SelectValue>
-          {manualTargetLanguage === "ja" ? "Japanese" : "English"}
+          {getLanguageDisplayName(manualTargetLanguage || "ja")}
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="en">English</SelectItem>
-        <SelectItem value="ja">Japanese</SelectItem>
+        {Object.entries(LANGUAGE_CONFIG).map(([code, config]) => (
+          <SelectItem key={code} value={code}>
+            {config.displayName}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );

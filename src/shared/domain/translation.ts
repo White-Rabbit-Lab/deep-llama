@@ -3,6 +3,31 @@ import { z } from "zod";
 export const SupportedLanguage = z.enum(["ja", "en"]);
 export type SupportedLanguage = z.infer<typeof SupportedLanguage>;
 
+export const LANGUAGE_CONFIG = {
+  ja: {
+    code: "ja" as const,
+    name: "Japanese",
+    displayName: "Japanese",
+  },
+  en: {
+    code: "en" as const,
+    name: "English",
+    displayName: "English",
+  },
+} as const;
+
+export type LanguageInfo = (typeof LANGUAGE_CONFIG)[SupportedLanguage];
+
+export function getLanguageName(languageCode: SupportedLanguage): string {
+  return LANGUAGE_CONFIG[languageCode].name;
+}
+
+export function getLanguageDisplayName(
+  languageCode: SupportedLanguage,
+): string {
+  return LANGUAGE_CONFIG[languageCode].displayName;
+}
+
 export const TranslationRequest = z.object({
   text: z.string().min(1),
   sourceLanguage: SupportedLanguage,
