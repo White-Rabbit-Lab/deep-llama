@@ -297,4 +297,4 @@ export const useTranslationStore = create<TranslationState>()(
   })),
 );
 
-// Auto-translation is handled at the component level with proper debouncing
+// Translation is now handled manually, with state management provided by the store.

@@ -38,7 +38,7 @@ export function TranslationOutput(): JSX.Element {
     return languageNames[manualTargetLanguage];
   };
 
-  // const shouldShowContent = translatedText || isTranslating;
+  
 
   return (
     <div className="flex h-full flex-col">
