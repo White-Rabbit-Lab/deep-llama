@@ -1,15 +1,15 @@
 {
   "private": true,
   "type": "module",
-  "name": "DeepLlama",
+  "name": "deep-llama",
   "version": "1.0.0",
   "engines": {
     "node": ">=22"
   },
-  "description": "An Electron application with React and TypeScript",
+  "description": "DeepL-like translation application powered by local AI models",
   "main": "out/main/index.mjs",
-  "author": "example.com",
-  "homepage": "https://electron-vite.org",
+  "author": "DeepLlama Project",
+  "homepage": "https://github.com/sotayamashita/DeepLlama",
   "scripts": {
     "prepare": "husky",
     "commit": "git-cz",
