@@ -14,6 +14,7 @@ export interface TranslationSettingsRepository {
   removeModel(modelName: string): Promise<TranslationSettings>;
   setDefaultModel(modelName: string): Promise<TranslationSettings>;
   getModels(): Promise<TranslationModel[]>;
+  updateModelUsage(modelName: string): Promise<void>;
 }
 
 export class TranslationSettingsRepositoryImpl
@@ -105,5 +106,29 @@ export class TranslationSettingsRepositoryImpl
   async getModels(): Promise<TranslationModel[]> {
     const settings = await this.getSettings();
     return settings.models;
+  }
+
+  async updateModelUsage(modelName: string): Promise<void> {
+    // Perform atomic update by getting current settings and updating only the specific model
+    const settings = await this.getSettings();
+    const modelIndex = settings.models.findIndex((m) => m.name === modelName);
+
+    if (modelIndex >= 0) {
+      // Create a deep copy to avoid mutations affecting the original
+      const updatedSettings = { ...settings };
+      updatedSettings.models = [...settings.models];
+      updatedSettings.models[modelIndex] = {
+        ...settings.models[modelIndex],
+        lastUsed: new Date(),
+      };
+
+      // Save the updated settings atomically
+      await this.store.set(
+        this.SETTINGS_KEY as "translation-settings",
+        updatedSettings,
+      );
+    } else {
+      console.warn(`Model "${modelName}" not found for usage tracking`);
+    }
   }
 }

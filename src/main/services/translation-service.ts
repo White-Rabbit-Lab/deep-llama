@@ -200,13 +200,7 @@ ${text}`;
 
   private async updateModelUsage(modelName: string): Promise<void> {
     try {
-      const settings = await this.settingsRepository.getSettings();
-      const modelIndex = settings.models.findIndex((m) => m.name === modelName);
-
-      if (modelIndex >= 0) {
-        settings.models[modelIndex].lastUsed = new Date();
-        await this.settingsRepository.updateSettings(settings);
-      }
+      await this.settingsRepository.updateModelUsage(modelName);
     } catch (error) {
       // Ignore errors in usage tracking
       console.warn("Failed to update model usage:", error);
