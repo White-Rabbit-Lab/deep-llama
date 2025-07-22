@@ -51,9 +51,7 @@ export function TranslationPage(): JSX.Element {
             <div className="border-b px-2 py-2">
               <LanguageSelector type="source" />
             </div>
-            <div className="flex-1 p-4">
-              <TranslationInput />
-            </div>
+            <TranslationInput />
           </div>
 
           {/* Separator with Swap Button */}
