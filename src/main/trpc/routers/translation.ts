@@ -122,8 +122,8 @@ export const translationRouter = router({
     .output(z.object({ cancelled: z.boolean() }))
     .mutation(async () => {
       const translationService = await container.getTranslationService();
-      translationService.cancelTranslation();
-      return { cancelled: true };
+      const result = translationService.cancelTranslation();
+      return { cancelled: result };
     }),
 
   isTranslating: publicProcedure

@@ -11,7 +11,7 @@ import type { OllamaService } from "./ollama-service.js";
 export interface TranslationService {
   translate(request: TranslationRequest): Promise<TranslationResponse>;
   translateText(text: string, modelName?: string): Promise<TranslationResponse>;
-  cancelTranslation(): void;
+  cancelTranslation(): boolean;
   isTranslating(): boolean;
 }
 
@@ -99,12 +99,14 @@ export class TranslationServiceImpl implements TranslationService {
     return this.translate({ text, modelName });
   }
 
-  cancelTranslation(): void {
-    if (this.activeController) {
+  cancelTranslation(): boolean {
+    if (this.activeController && this.isCurrentlyTranslating) {
       this.activeController.abort();
       this.activeController = null;
+      this.isCurrentlyTranslating = false;
+      return true; // Successfully cancelled an active translation
     }
-    this.isCurrentlyTranslating = false;
+    return false; // No active translation to cancel
   }
 
   isTranslating(): boolean {
