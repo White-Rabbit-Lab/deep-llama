@@ -1,6 +1,7 @@
 import { ArrowLeftRight } from "lucide-react";
 import type { JSX } from "react";
 import { useEffect } from "react";
+import { ModeToggle } from "../components/mode-toggle";
 import { ConnectionStatus } from "../components/translation/connection-status";
 import { LanguageSelector } from "../components/translation/language-selector";
 import { ModelSelector } from "../components/translation/model-selector";
@@ -23,13 +24,14 @@ export function TranslationPage(): JSX.Element {
     <div className="flex h-screen flex-col">
       {/* Header */}
       <header className="bg-background flex-shrink-0 border-b">
-        <div className="flex items-center justify-between px-6 py-2">
+        <div className="flex items-center justify-between px-4 py-2">
           <div className="flex items-center space-x-4">
             <h1 className="text-xl font-semibold">DeepLlama</h1>
             <ConnectionStatus status={connectionStatus} />
           </div>
           <div className="flex items-center space-x-4">
             <ModelSelector />
+            <ModeToggle />
           </div>
         </div>
       </header>
