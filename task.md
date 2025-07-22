@@ -40,7 +40,7 @@ DeepLlamaは、完全ローカルで動作するOllama統合翻訳アプリケ�
 {
   "新規追加": {
     "ollama": "^0.5.16",
-    "franc": "^6.2.0",
+    ~~"franc": "^6.2.0"~~,
     "react-use-clipboard": "latest",
     "sonner": "latest"
   }
@@ -53,14 +53,14 @@ DeepLlamaは、完全ローカルで動作するOllama統合翻訳アプリケ�
 
 #### Task 1.1: 依存関係追加
 
-- [x] `ollama`, `franc`, `react-use-clipboard`, `sonner`をインストール
+- [x] `ollama`, ~~`franc`~~, `react-use-clipboard`, `sonner`をインストール
 - [x] TypeScript型定義の確認・追加
 
 #### Task 1.2: Domain Layer拡張
 
 - [x] `src/shared/domain/translation.ts` - 翻訳関連スキーマ定義
   - TranslationRequest, TranslationResponse
-  - SupportedLanguage, DetectedLanguage
+  - SupportedLanguage, ~~DetectedLanguage~~
   - TranslationModel, TranslationSettings
 - [x] `src/shared/domain/ollama.ts` - Ollama関連スキーマ定義
 
@@ -221,7 +221,7 @@ DeepLlamaは、完全ローカルで動作するOllama統合翻訳アプリケ�
 
 #### Task 8.1: ユニットテスト
 
-- [ ] 言語検出サービステスト（franc統合）
+- [x] ~~言語検出サービステスト（franc統合）~~
 - [ ] 翻訳サービステスト（モック使用）
 - [ ] リポジトリテスト（永続化）
 - [ ] ストアテスト（状態管理）
@@ -304,8 +304,8 @@ DeepLlamaは、完全ローカルで動作するOllama統合翻訳アプリケ�
 1. **自動翻訳から手動翻訳への変更**
    - デバウンス自動翻訳を削除
    - 翻訳ボタン・Command+Enterショートカット実装
-2. **Auto Detect機能の削除**
-   - francライブラリベースの言語検出を削除
+2. **~~Auto Detect機能の削除~~**
+   - ~~francライブラリベースの言語検出を削除~~
    - 手動言語選択のみに変更
 3. **UI実装**
    - 言語セレクターを各翻訳エリア上部に配置

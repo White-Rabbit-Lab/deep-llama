@@ -34,7 +34,7 @@ interface TranslationState {
   // Language selection state
   manualSourceLanguage: SupportedLanguage;
   setManualSourceLanguage: (language: SupportedLanguage) => void;
-  manualTargetLanguage: SupportedLanguage | undefined;
+  manualTargetLanguage: SupportedLanguage;
   setManualTargetLanguage: (language: SupportedLanguage) => void;
   swapLanguages: () => void;
 

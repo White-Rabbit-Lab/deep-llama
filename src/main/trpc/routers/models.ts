@@ -113,7 +113,6 @@ export const modelsRouter = router({
   updateSettings: publicProcedure
     .input(
       z.object({
-        autoDetectLanguage: z.boolean().optional(),
         defaultModel: z.string().optional(),
       }),
     )

@@ -20,8 +20,8 @@ export const translationRouter = router({
     .input(
       z.object({
         text: z.string().min(1),
-        sourceLanguage: SupportedLanguage.optional(),
-        targetLanguage: SupportedLanguage.optional(),
+        sourceLanguage: SupportedLanguage,
+        targetLanguage: SupportedLanguage,
         modelName: z.string().optional(),
       }),
     )
@@ -34,33 +34,6 @@ export const translationRouter = router({
         targetLanguage: input.targetLanguage,
         modelName: input.modelName,
       });
-    }),
-
-  detectLanguage: publicProcedure
-    .input(
-      z.object({
-        text: z.string().min(1),
-      }),
-    )
-    .output(
-      z.object({
-        code: SupportedLanguage,
-        confidence: z.number().min(0).max(1),
-        detected: z.boolean(),
-      }),
-    )
-    .query(async ({ input }) => {
-      const languageDetectionService =
-        await container.getLanguageDetectionService();
-      return await languageDetectionService.detectLanguage(input.text);
-    }),
-
-  getSupportedLanguages: publicProcedure
-    .output(z.array(SupportedLanguage))
-    .query(async () => {
-      const languageDetectionService =
-        await container.getLanguageDetectionService();
-      return languageDetectionService.getSupportedLanguages();
     }),
 
   getAvailableModels: publicProcedure

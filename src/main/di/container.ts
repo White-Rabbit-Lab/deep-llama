@@ -9,7 +9,6 @@ import { LanguageRepository } from "../repository/language-repository.js";
 import { ThemeRepository } from "../repository/theme-repository.js";
 import { TodoRepository } from "../repository/todo-repository.js";
 import { TranslationSettingsRepositoryImpl } from "../repository/translation-settings-repository.js";
-import { LanguageDetectionServiceImpl } from "../services/language-detection-service.js";
 import { OllamaServiceImpl } from "../services/ollama-service.js";
 import { TranslationServiceImpl } from "../services/translation-service.js";
 
@@ -26,7 +25,6 @@ class DIContainer {
     | TranslationSettingsRepositoryImpl
     | undefined;
   private ollamaService: OllamaServiceImpl | undefined;
-  private languageDetectionService: LanguageDetectionServiceImpl | undefined;
   private translationService: TranslationServiceImpl | undefined;
 
   /**
@@ -48,10 +46,8 @@ class DIContainer {
 
     // Initialize services
     this.ollamaService = new OllamaServiceImpl();
-    this.languageDetectionService = new LanguageDetectionServiceImpl();
     this.translationService = new TranslationServiceImpl(
       this.ollamaService,
-      this.languageDetectionService,
       this.translationSettingsRepository,
     );
 
@@ -104,14 +100,6 @@ class DIContainer {
   async getOllamaService(): Promise<OllamaServiceImpl> {
     await this.ensureInitialized();
     return this.ollamaService!;
-  }
-
-  /**
-   * Get the Language Detection service
-   */
-  async getLanguageDetectionService(): Promise<LanguageDetectionServiceImpl> {
-    await this.ensureInitialized();
-    return this.languageDetectionService!;
   }
 
   /**

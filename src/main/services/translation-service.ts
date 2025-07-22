@@ -1,11 +1,9 @@
 import type {
-  DetectedLanguage,
   SupportedLanguage,
   TranslationRequest,
   TranslationResponse,
 } from "../../shared/domain/translation.js";
 import type { TranslationSettingsRepository } from "../repository/translation-settings-repository.js";
-import type { LanguageDetectionService } from "./language-detection-service.js";
 import type { OllamaService } from "./ollama-service.js";
 
 export interface TranslationService {
@@ -21,7 +19,6 @@ export class TranslationServiceImpl implements TranslationService {
 
   constructor(
     private readonly ollamaService: OllamaService,
-    private readonly languageDetectionService: LanguageDetectionService,
     private readonly settingsRepository: TranslationSettingsRepository,
   ) {}
 
@@ -30,26 +27,13 @@ export class TranslationServiceImpl implements TranslationService {
     this.activeController = new AbortController();
 
     try {
-      // Detect source language if not provided
-      let sourceLanguage = request.sourceLanguage;
-      let detectedLanguage: DetectedLanguage;
+      // Source and target languages are required
+      const sourceLanguage = request.sourceLanguage;
+      const targetLanguage = request.targetLanguage;
 
-      if (!sourceLanguage) {
-        detectedLanguage = await this.languageDetectionService.detectLanguage(
-          request.text,
-        );
-        sourceLanguage = detectedLanguage.code;
-      } else {
-        detectedLanguage = {
-          code: sourceLanguage,
-          confidence: 1.0,
-          detected: true,
-        };
+      if (!sourceLanguage || !targetLanguage) {
+        throw new Error("Source and target languages are required");
       }
-
-      // Use provided target language or determine based on auto-switching logic
-      const targetLanguage =
-        request.targetLanguage || this.determineTargetLanguage(sourceLanguage);
 
       // Get model to use
       const modelName = await this.getModelToUse(request.modelName);
@@ -60,7 +44,6 @@ export class TranslationServiceImpl implements TranslationService {
           translatedText: request.text,
           sourceLanguage,
           targetLanguage,
-          detectedLanguage,
           modelUsed: modelName,
           timestamp: new Date().toISOString(),
         };
@@ -82,7 +65,6 @@ export class TranslationServiceImpl implements TranslationService {
         translatedText,
         sourceLanguage,
         targetLanguage,
-        detectedLanguage,
         modelUsed: modelName,
         timestamp: new Date().toISOString(),
       };
@@ -96,7 +78,13 @@ export class TranslationServiceImpl implements TranslationService {
     text: string,
     modelName?: string,
   ): Promise<TranslationResponse> {
-    return this.translate({ text, modelName });
+    // Default to ja->en translation, can be customized as needed
+    return this.translate({
+      text,
+      sourceLanguage: "ja",
+      targetLanguage: "en",
+      modelName,
+    });
   }
 
   cancelTranslation(): boolean {
@@ -111,13 +99,6 @@ export class TranslationServiceImpl implements TranslationService {
 
   isTranslating(): boolean {
     return this.isCurrentlyTranslating;
-  }
-
-  private determineTargetLanguage(
-    sourceLanguage: SupportedLanguage,
-  ): SupportedLanguage {
-    // Auto-switching logic: ja → en, en → ja
-    return sourceLanguage === "ja" ? "en" : "ja";
   }
 
   private async getModelToUse(requestedModel?: string): Promise<string> {
