@@ -8,6 +8,24 @@ import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { trpc } from "../lib/trpc";
 
+/**
+ * Helper function to convert model lastUsed dates from string to Date objects
+ * @param models Array of models with potentially string lastUsed dates
+ * @returns Array of models with lastUsed converted to Date objects or undefined
+ */
+function convertModelDates(
+  models: Array<
+    Omit<TranslationModel, "lastUsed"> & {
+      lastUsed?: string | Date | undefined;
+    }
+  >,
+): TranslationModel[] {
+  return models.map((model) => ({
+    ...model,
+    lastUsed: model.lastUsed ? new Date(model.lastUsed) : undefined,
+  }));
+}
+
 interface TranslationState {
   // Input state
   inputText: string;
@@ -192,10 +210,7 @@ export const useTranslationStore = create<TranslationState>()(
 
         const convertedSettings = {
           ...updatedSettings,
-          models: updatedSettings.models.map((model) => ({
-            ...model,
-            lastUsed: model.lastUsed ? new Date(model.lastUsed) : undefined,
-          })),
+          models: convertModelDates(updatedSettings.models),
         };
 
         set({
@@ -219,10 +234,7 @@ export const useTranslationStore = create<TranslationState>()(
 
         const convertedSettings = {
           ...updatedSettings,
-          models: updatedSettings.models.map((model) => ({
-            ...model,
-            lastUsed: model.lastUsed ? new Date(model.lastUsed) : undefined,
-          })),
+          models: convertModelDates(updatedSettings.models),
         };
 
         set({
@@ -246,10 +258,7 @@ export const useTranslationStore = create<TranslationState>()(
         const models = await trpc.models.getModels.query();
         const settings = await trpc.models.getSettings.query();
 
-        const convertedModels = models.map((model) => ({
-          ...model,
-          lastUsed: model.lastUsed ? new Date(model.lastUsed) : undefined,
-        }));
+        const convertedModels = convertModelDates(models);
 
         const convertedSettings = {
           ...settings,
