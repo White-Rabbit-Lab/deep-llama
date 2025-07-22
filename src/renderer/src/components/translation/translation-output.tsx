@@ -6,8 +6,7 @@ import { useTranslationStore } from "../../stores/translation-store";
 import { Button } from "../ui/button";
 
 export function TranslationOutput(): JSX.Element {
-  const { translatedText, isTranslating, manualTargetLanguage } =
-    useTranslationStore();
+  const { translatedText, isTranslating } = useTranslationStore();
 
   const [isCopied, setIsCopied] = useState(false);
 
@@ -25,17 +24,6 @@ export function TranslationOutput(): JSX.Element {
       toast.error("Failed to copy to clipboard");
       console.error("Copy failed:", error);
     }
-  };
-
-  const getLanguageDisplay = (): string | null => {
-    if (!manualTargetLanguage) return null;
-
-    const languageNames = {
-      ja: "Japanese",
-      en: "English",
-    };
-
-    return languageNames[manualTargetLanguage];
   };
 
   return (
@@ -56,27 +44,6 @@ export function TranslationOutput(): JSX.Element {
                 {translatedText}
               </p>
             </div>
-
-            {/* Copy Button */}
-            <Button
-              variant="outline"
-              size="sm"
-              className="absolute top-2 right-2"
-              onClick={handleCopy}
-              disabled={!translatedText}
-            >
-              {isCopied ? (
-                <>
-                  <Check className="mr-1 h-4 w-4" />
-                  Copied
-                </>
-              ) : (
-                <>
-                  <Copy className="mr-1 h-4 w-4" />
-                  Copy
-                </>
-              )}
-            </Button>
           </div>
         ) : (
           <div className="text-muted-foreground flex h-full items-center justify-center">
@@ -91,7 +58,24 @@ export function TranslationOutput(): JSX.Element {
           {translatedText && <span>Characters: {translatedText.length}</span>}
         </div>
         <div>
-          {manualTargetLanguage && <span>Target: {getLanguageDisplay()}</span>}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleCopy}
+            disabled={!translatedText}
+          >
+            {isCopied ? (
+              <>
+                <Check className="mr-1 h-4 w-4" />
+                Copied
+              </>
+            ) : (
+              <>
+                <Copy className="mr-1 h-4 w-4" />
+                Copy
+              </>
+            )}
+          </Button>
         </div>
       </div>
     </div>
