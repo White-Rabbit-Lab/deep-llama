@@ -2,7 +2,6 @@ import { publicProcedure, router } from "./core.js";
 import { languageRouter } from "./routers/language.js";
 import { modelsRouter } from "./routers/models.js";
 import { themeRouter } from "./routers/theme.js";
-import { todoRouter } from "./routers/todo.js";
 import { translationRouter } from "./routers/translation.js";
 
 /**
@@ -14,9 +13,6 @@ import { translationRouter } from "./routers/translation.js";
 export const appRouter = router({
   /** Simple health‑check */
   ping: publicProcedure.query(() => "pong"),
-
-  /** Todo domain procedures */
-  task: todoRouter,
 
   /** Theme domain procedures */
   theme: themeRouter,

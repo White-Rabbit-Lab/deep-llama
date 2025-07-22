@@ -7,7 +7,6 @@ import type { TypedStore } from "../persistence/store.js";
 import { getAppStore } from "../persistence/store.js";
 import { LanguageRepository } from "../repository/language-repository.js";
 import { ThemeRepository } from "../repository/theme-repository.js";
-import { TodoRepository } from "../repository/todo-repository.js";
 import { TranslationSettingsRepositoryImpl } from "../repository/translation-settings-repository.js";
 import { OllamaServiceImpl } from "../services/ollama-service.js";
 import { TranslationServiceImpl } from "../services/translation-service.js";
@@ -18,7 +17,6 @@ import { TranslationServiceImpl } from "../services/translation-service.js";
 class DIContainer {
   private initialized = false;
   private store: TypedStore | undefined;
-  private todoRepository: TodoRepository | undefined;
   private themeRepository: ThemeRepository | undefined;
   private languageRepository: LanguageRepository | undefined;
   private translationSettingsRepository:
@@ -37,7 +35,6 @@ class DIContainer {
     this.store = await getAppStore();
 
     // Initialize repositories
-    this.todoRepository = new TodoRepository(this.store);
     this.themeRepository = new ThemeRepository(this.store);
     this.languageRepository = new LanguageRepository(this.store);
     this.translationSettingsRepository = new TranslationSettingsRepositoryImpl(
@@ -60,14 +57,6 @@ class DIContainer {
   async getStore(): Promise<TypedStore> {
     await this.ensureInitialized();
     return this.store!;
-  }
-
-  /**
-   * Get the Todo repository
-   */
-  async getTodoRepository(): Promise<TodoRepository> {
-    await this.ensureInitialized();
-    return this.todoRepository!;
   }
 
   /**
