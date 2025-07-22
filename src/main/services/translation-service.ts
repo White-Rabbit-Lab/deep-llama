@@ -8,7 +8,12 @@ import type { OllamaService } from "./ollama-service.js";
 
 export interface TranslationService {
   translate(request: TranslationRequest): Promise<TranslationResponse>;
-  translateText(text: string, modelName?: string): Promise<TranslationResponse>;
+  translateText(
+    text: string,
+    sourceLanguage: SupportedLanguage,
+    targetLanguage: SupportedLanguage,
+    modelName?: string,
+  ): Promise<TranslationResponse>;
   cancelTranslation(): boolean;
   isTranslating(): boolean;
 }
@@ -76,13 +81,14 @@ export class TranslationServiceImpl implements TranslationService {
 
   async translateText(
     text: string,
+    sourceLanguage: SupportedLanguage,
+    targetLanguage: SupportedLanguage,
     modelName?: string,
   ): Promise<TranslationResponse> {
-    // Default to ja->en translation, can be customized as needed
     return this.translate({
       text,
-      sourceLanguage: "ja",
-      targetLanguage: "en",
+      sourceLanguage,
+      targetLanguage,
       modelName,
     });
   }

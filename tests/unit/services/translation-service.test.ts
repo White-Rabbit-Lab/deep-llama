@@ -204,7 +204,7 @@ describe("TranslationService", () => {
   });
 
   describe("translateText", () => {
-    test("calls translate with default ja->en translation", async () => {
+    test("calls translate with ja->en translation and custom model", async () => {
       const translateSpy = vi.spyOn(service, "translate");
       translateSpy.mockResolvedValue({
         translatedText: "Hello World",
@@ -214,13 +214,33 @@ describe("TranslationService", () => {
         timestamp: "2024-01-01T00:00:00.000Z",
       });
 
-      await service.translateText("こんにちは世界", "custom-model");
+      await service.translateText("こんにちは世界", "ja", "en", "custom-model");
 
       expect(translateSpy).toHaveBeenCalledWith({
         text: "こんにちは世界",
         sourceLanguage: "ja",
         targetLanguage: "en",
         modelName: "custom-model",
+      });
+    });
+
+    test("calls translate with en->ja translation", async () => {
+      const translateSpy = vi.spyOn(service, "translate");
+      translateSpy.mockResolvedValue({
+        translatedText: "こんにちは世界",
+        sourceLanguage: "en",
+        targetLanguage: "ja",
+        modelUsed: "llama2:latest",
+        timestamp: "2024-01-01T00:00:00.000Z",
+      });
+
+      await service.translateText("Hello World", "en", "ja");
+
+      expect(translateSpy).toHaveBeenCalledWith({
+        text: "Hello World",
+        sourceLanguage: "en",
+        targetLanguage: "ja",
+        modelName: undefined,
       });
     });
 
@@ -234,7 +254,7 @@ describe("TranslationService", () => {
         timestamp: "2024-01-01T00:00:00.000Z",
       });
 
-      await service.translateText("こんにちは世界");
+      await service.translateText("こんにちは世界", "ja", "en");
 
       expect(translateSpy).toHaveBeenCalledWith({
         text: "こんにちは世界",
