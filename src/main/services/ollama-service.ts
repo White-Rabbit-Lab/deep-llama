@@ -18,18 +18,40 @@ export interface OllamaService {
 export class OllamaServiceImpl implements OllamaService {
   private readonly ollama: Ollama;
   private connectionStatus: OllamaConnectionStatus = "disconnected";
+  private statusUpdateInProgress: Promise<void> = Promise.resolve();
 
   constructor(host: string = "http://localhost:11434") {
     this.ollama = new Ollama({ host });
   }
 
+  /**
+   * Thread-safe method to update connection status
+   * Uses mutex pattern to prevent race conditions
+   */
+  private async updateConnectionStatus(
+    status: OllamaConnectionStatus,
+  ): Promise<void> {
+    // Wait for any previous status update to complete
+    await this.statusUpdateInProgress;
+
+    // Create new promise for this update operation
+    this.statusUpdateInProgress = new Promise((resolve) => {
+      // Update status atomically
+      this.connectionStatus = status;
+      resolve();
+    });
+
+    // Wait for this update to complete
+    await this.statusUpdateInProgress;
+  }
+
   async isConnected(): Promise<boolean> {
     try {
       await this.ollama.list();
-      this.connectionStatus = "connected";
+      await this.updateConnectionStatus("connected");
       return true;
     } catch {
-      this.connectionStatus = "disconnected";
+      await this.updateConnectionStatus("disconnected");
       return false;
     }
   }
@@ -41,9 +63,9 @@ export class OllamaServiceImpl implements OllamaService {
 
   async listModels(): Promise<OllamaModel[]> {
     try {
-      this.connectionStatus = "connecting";
+      await this.updateConnectionStatus("connecting");
       const response = await this.ollama.list();
-      this.connectionStatus = "connected";
+      await this.updateConnectionStatus("connected");
       return response.models.map((model) => ({
         ...model,
         modified_at:
@@ -52,7 +74,7 @@ export class OllamaServiceImpl implements OllamaService {
             : model.modified_at,
       }));
     } catch (error) {
-      this.connectionStatus = "error";
+      await this.updateConnectionStatus("error");
       throw this.handleError(error, "Failed to list models");
     }
   }
@@ -97,7 +119,7 @@ export class OllamaServiceImpl implements OllamaService {
 
   async chat(request: OllamaChatRequest): Promise<string> {
     try {
-      this.connectionStatus = "connecting";
+      await this.updateConnectionStatus("connecting");
 
       // Verify model exists
       if (!(await this.modelExists(request.model))) {
@@ -114,10 +136,10 @@ export class OllamaServiceImpl implements OllamaService {
         },
       });
 
-      this.connectionStatus = "connected";
+      await this.updateConnectionStatus("connected");
       return response.message.content;
     } catch (error) {
-      this.connectionStatus = "error";
+      await this.updateConnectionStatus("error");
       throw this.handleError(error, "Translation failed");
     }
   }
@@ -126,7 +148,7 @@ export class OllamaServiceImpl implements OllamaService {
     request: OllamaChatRequest,
   ): AsyncGenerator<string, void, unknown> {
     try {
-      this.connectionStatus = "connecting";
+      await this.updateConnectionStatus("connecting");
 
       // Verify model exists
       if (!(await this.modelExists(request.model))) {
@@ -143,7 +165,7 @@ export class OllamaServiceImpl implements OllamaService {
         },
       });
 
-      this.connectionStatus = "connected";
+      await this.updateConnectionStatus("connected");
 
       for await (const chunk of stream) {
         if (chunk.message?.content) {
@@ -151,7 +173,7 @@ export class OllamaServiceImpl implements OllamaService {
         }
       }
     } catch (error) {
-      this.connectionStatus = "error";
+      await this.updateConnectionStatus("error");
       throw this.handleError(error, "Streaming translation failed");
     }
   }
