@@ -38,7 +38,6 @@ export type TranslationModel = z.infer<typeof TranslationModel>;
 
 export const TranslationSettings = z.object({
   defaultModel: z.string().optional(),
-  debounceMs: z.number().int().min(100).max(5000).default(500),
   autoDetectLanguage: z.boolean().default(false),
   models: z.array(TranslationModel).default([]),
 });

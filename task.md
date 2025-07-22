@@ -41,7 +41,6 @@ DeepLlamaは、完全ローカルで動作するOllama統合翻訳アプリケ�
   "新規追加": {
     "ollama": "^0.5.16",
     "franc": "^6.2.0",
-    "use-debounce": "latest",
     "react-use-clipboard": "latest",
     "sonner": "latest"
   }
@@ -54,7 +53,7 @@ DeepLlamaは、完全ローカルで動作するOllama統合翻訳アプリケ�
 
 #### Task 1.1: 依存関係追加
 
-- [x] `ollama`, `franc`, `use-debounce`, `react-use-clipboard`, `sonner`をインストール
+- [x] `ollama`, `franc`, `react-use-clipboard`, `sonner`をインストール
 - [x] TypeScript型定義の確認・追加
 
 #### Task 1.2: Domain Layer拡張

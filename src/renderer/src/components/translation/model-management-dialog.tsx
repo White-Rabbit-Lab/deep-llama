@@ -175,19 +175,11 @@ export function ModelManagementDialog({
             {/* Settings Summary */}
             <div className="bg-muted/50 rounded-lg p-3">
               <h4 className="mb-2 text-sm font-medium">Settings</h4>
-              <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="text-sm">
                 <div>
                   <span className="text-muted-foreground">Default Model:</span>
                   <span className="ml-2 font-medium">
                     {settings?.defaultModel || "None"}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">
-                    Auto-translate Delay:
-                  </span>
-                  <span className="ml-2 font-medium">
-                    {settings?.debounceMs || 500}ms
                   </span>
                 </div>
               </div>

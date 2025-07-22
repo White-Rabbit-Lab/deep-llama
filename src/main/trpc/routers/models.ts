@@ -113,7 +113,6 @@ export const modelsRouter = router({
   updateSettings: publicProcedure
     .input(
       z.object({
-        debounceMs: z.number().int().min(100).max(5000).optional(),
         autoDetectLanguage: z.boolean().optional(),
         defaultModel: z.string().optional(),
       }),
