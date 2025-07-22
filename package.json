@@ -1,6 +1,7 @@
 {
+  "private": true,
   "type": "module",
-  "name": "electron-vite-react-ts",
+  "name": "DeepLlama",
   "version": "1.0.0",
   "engines": {
     "node": ">=22"
