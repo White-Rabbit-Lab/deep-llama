@@ -68,9 +68,12 @@ export function bootstrapI18n(): typeof i18n {
   });
 
   // Listen for language change events from the main process
-  window.api.i18n.onLanguageChanged((newLanguage) => {
-    i18n.changeLanguage(newLanguage);
-  });
+  // Only set up the listener if window.api is available (Electron mode)
+  if (window.api && window.api.i18n) {
+    window.api.i18n.onLanguageChanged((newLanguage) => {
+      i18n.changeLanguage(newLanguage);
+    });
+  }
 
   return i18n;
 }
