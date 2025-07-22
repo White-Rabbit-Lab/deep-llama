@@ -24,7 +24,7 @@ export class TranslationSettingsRepositoryImpl
   private readonly DEFAULT_SETTINGS: TranslationSettings = {
     defaultModel: undefined,
     debounceMs: 500,
-    autoDetectLanguage: true,
+    autoDetectLanguage: false,
     models: [],
   };
 
