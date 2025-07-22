@@ -98,6 +98,12 @@ const api = {
       };
     },
   },
+
+  // Translation API
+  translation: trpc.translation,
+
+  // Models API
+  models: trpc.models,
 };
 
 // Expose APIs to renderer via contextBridge

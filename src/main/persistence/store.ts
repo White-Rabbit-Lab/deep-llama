@@ -1,6 +1,7 @@
 import type { Language } from "#shared/domain/language.js";
 import type { Theme } from "#shared/domain/theme.js";
 import type { Todo } from "#shared/domain/todo.js";
+import type { TranslationSettings } from "#shared/domain/translation.js";
 import { ElectronPersistenceStore } from "./electron-store.js";
 import type { PersistenceStore } from "./store-interface.js";
 
@@ -12,6 +13,7 @@ export type StoreSchema = {
   todos: Todo[];
   theme: Theme;
   userLanguage: Language;
+  "translation-settings": TranslationSettings;
 };
 
 /** Typed Store interface that knows about our schema */

@@ -31,12 +31,16 @@ export function ThemeProvider({
     (async () => {
       try {
         const remote = await trpc.theme.get.query();
-        if (remote) setThemeLocal(remote as Theme);
+        if (remote && typeof remote === "string") {
+          setThemeLocal(remote as Theme);
+        }
       } catch (err) {
         console.error("theme get error", err);
+        // Fallback to default theme in case of error
+        setThemeLocal(defaultTheme);
       }
     })();
-  }, []);
+  }, [defaultTheme]);
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -53,7 +57,10 @@ export function ThemeProvider({
       return;
     }
 
-    root.classList.add(theme);
+    // Ensure theme is a valid string before adding to classList
+    if (typeof theme === "string" && (theme === "light" || theme === "dark")) {
+      root.classList.add(theme);
+    }
   }, [theme]);
 
   const value = {

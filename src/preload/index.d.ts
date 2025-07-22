@@ -7,6 +7,8 @@ interface API {
     initialLng: string;
     onLanguageChanged: (callback: (lng: string) => void) => () => void;
   };
+  translation: TRPCClient<AppRouter>["translation"];
+  models: TRPCClient<AppRouter>["models"];
 }
 
 declare global {
