@@ -6,7 +6,7 @@
   "engines": {
     "node": ">=22"
   },
-  "description": "DeepL-like translation application powered by local AI models",
+  "description": "Translation application powered by local AI models",
   "main": "out/main/index.mjs",
   "author": "DeepLlama Project",
   "homepage": "https://github.com/sotayamashita/DeepLlama",
