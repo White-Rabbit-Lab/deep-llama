@@ -121,9 +121,15 @@ export class OllamaServiceImpl implements OllamaService {
     try {
       await this.updateConnectionStatus("connecting");
 
-      // Verify model exists
-      if (!(await this.modelExists(request.model))) {
-        throw new Error(`Model "${request.model}" not found in Ollama`);
+      // Verify model exists - wrap in try-catch to ensure proper status update
+      try {
+        if (!(await this.modelExists(request.model))) {
+          await this.updateConnectionStatus("error");
+          throw new Error(`Model "${request.model}" not found in Ollama`);
+        }
+      } catch (error) {
+        await this.updateConnectionStatus("error");
+        throw error;
       }
 
       const response = await this.ollama.chat({
@@ -150,9 +156,15 @@ export class OllamaServiceImpl implements OllamaService {
     try {
       await this.updateConnectionStatus("connecting");
 
-      // Verify model exists
-      if (!(await this.modelExists(request.model))) {
-        throw new Error(`Model "${request.model}" not found in Ollama`);
+      // Verify model exists - wrap in try-catch to ensure proper status update
+      try {
+        if (!(await this.modelExists(request.model))) {
+          await this.updateConnectionStatus("error");
+          throw new Error(`Model "${request.model}" not found in Ollama`);
+        }
+      } catch (error) {
+        await this.updateConnectionStatus("error");
+        throw error;
       }
 
       const stream = await this.ollama.chat({
