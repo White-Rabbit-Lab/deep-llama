@@ -38,7 +38,7 @@ export const modelsRouter = router({
         name: input.name,
         isDefault: input.makeDefault,
         isAvailable: true,
-        lastUsed: new Date(),
+        lastUsed: new Date().toISOString(),
       };
 
       // Ensure atomicity: perform both operations as a single transaction

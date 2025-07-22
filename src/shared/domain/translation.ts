@@ -24,7 +24,7 @@ export const TranslationResponse = z.object({
   targetLanguage: SupportedLanguage,
   detectedLanguage: DetectedLanguage,
   modelUsed: z.string(),
-  timestamp: z.date(),
+  timestamp: z.string().datetime(),
 });
 export type TranslationResponse = z.infer<typeof TranslationResponse>;
 
@@ -32,7 +32,7 @@ export const TranslationModel = z.object({
   name: z.string().min(1),
   isDefault: z.boolean().default(false),
   isAvailable: z.boolean().default(true),
-  lastUsed: z.date().optional(),
+  lastUsed: z.string().datetime().optional(),
 });
 export type TranslationModel = z.infer<typeof TranslationModel>;
 

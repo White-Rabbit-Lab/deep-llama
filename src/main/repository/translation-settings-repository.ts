@@ -119,7 +119,7 @@ export class TranslationSettingsRepositoryImpl
       updatedSettings.models = [...settings.models];
       updatedSettings.models[modelIndex] = {
         ...settings.models[modelIndex],
-        lastUsed: new Date(),
+        lastUsed: new Date().toISOString(),
       };
 
       // Save the updated settings atomically

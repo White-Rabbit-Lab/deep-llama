@@ -62,7 +62,7 @@ export class TranslationServiceImpl implements TranslationService {
           targetLanguage,
           detectedLanguage,
           modelUsed: modelName,
-          timestamp: new Date(),
+          timestamp: new Date().toISOString(),
         };
       }
 
@@ -84,7 +84,7 @@ export class TranslationServiceImpl implements TranslationService {
         targetLanguage,
         detectedLanguage,
         modelUsed: modelName,
-        timestamp: new Date(),
+        timestamp: new Date().toISOString(),
       };
     } finally {
       this.isCurrentlyTranslating = false;

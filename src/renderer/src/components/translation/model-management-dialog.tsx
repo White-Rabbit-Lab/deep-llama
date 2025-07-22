@@ -134,7 +134,8 @@ export function ModelManagementDialog({
                         </div>
                         {model.lastUsed && (
                           <p className="text-muted-foreground mt-1 text-xs">
-                            Last used: {model.lastUsed.toLocaleDateString()}
+                            Last used:{" "}
+                            {new Date(model.lastUsed).toLocaleDateString()}
                           </p>
                         )}
                       </div>

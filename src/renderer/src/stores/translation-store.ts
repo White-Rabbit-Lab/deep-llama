@@ -9,20 +9,20 @@ import { subscribeWithSelector } from "zustand/middleware";
 import { trpc } from "../lib/trpc";
 
 /**
- * Helper function to convert model lastUsed dates from string to Date objects
- * @param models Array of models with potentially string lastUsed dates
- * @returns Array of models with lastUsed converted to Date objects or undefined
+ * Helper function to normalize model objects (previously converted dates)
+ * @param models Array of models with ISO string lastUsed dates
+ * @returns Array of models as-is (no conversion needed)
  */
 function convertModelDates(
   models: Array<
     Omit<TranslationModel, "lastUsed"> & {
-      lastUsed?: string | Date | undefined;
+      lastUsed?: string | undefined;
     }
   >,
 ): TranslationModel[] {
   return models.map((model) => ({
     ...model,
-    lastUsed: model.lastUsed ? new Date(model.lastUsed) : undefined,
+    lastUsed: model.lastUsed,
   }));
 }
 
@@ -186,10 +186,7 @@ export const useTranslationStore = create<TranslationState>()(
 
         const convertedSettings = {
           ...updatedSettings,
-          models: updatedSettings.models.map((model) => ({
-            ...model,
-            lastUsed: model.lastUsed ? new Date(model.lastUsed) : undefined,
-          })),
+          models: convertModelDates(updatedSettings.models),
         };
 
         set({
