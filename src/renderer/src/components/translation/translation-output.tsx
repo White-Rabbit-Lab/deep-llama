@@ -1,4 +1,4 @@
-import { Check, Copy } from "lucide-react";
+import { IconCopy, IconCopyCheck } from "@tabler/icons-react";
 import type { JSX } from "react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -53,7 +53,7 @@ export function TranslationOutput(): JSX.Element {
       </div>
 
       {/* Status Bar */}
-      <div className="text-muted-foreground flex items-center justify-between border-t pt-4 text-sm">
+      <div className="text-muted-foreground flex items-center justify-between border-t px-5 py-4 text-sm">
         <div>
           {translatedText && <span>Characters: {translatedText.length}</span>}
         </div>
@@ -66,12 +66,12 @@ export function TranslationOutput(): JSX.Element {
           >
             {isCopied ? (
               <>
-                <Check className="mr-1 h-4 w-4" />
+                <IconCopyCheck />
                 Copied
               </>
             ) : (
               <>
-                <Copy className="mr-1 h-4 w-4" />
+                <IconCopy />
                 Copy
               </>
             )}

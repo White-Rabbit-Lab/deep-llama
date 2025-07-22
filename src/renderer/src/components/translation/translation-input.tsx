@@ -1,3 +1,4 @@
+import { IconLoader2, IconSend } from "@tabler/icons-react";
 import type { JSX } from "react";
 import { useCallback, useEffect } from "react";
 import { useTranslationStore } from "../../stores/translation-store";
@@ -37,12 +38,13 @@ export function TranslationInput(): JSX.Element {
   return (
     <div className="flex h-full flex-col">
       {/* Text Input Area */}
-      <div className="relative flex-1">
+      {/* Set px-[8px] to align Taget language */}
+      <div className="flex-1 px-[8px] py-2">
         <Textarea
           value={inputText}
           onChange={(e) => handleInputChange(e.target.value)}
           placeholder="Enter text to translate..."
-          className="h-full resize-none border-0 text-base shadow-none focus-visible:ring-0"
+          className="h-full resize-none rounded-none border-0 text-base shadow-none focus-visible:ring-0"
           disabled={isTranslating}
         />
 
@@ -55,7 +57,7 @@ export function TranslationInput(): JSX.Element {
       </div>
 
       {/* Status Bar */}
-      <div className="text-muted-foreground flex items-center justify-between border-t pt-4 text-sm">
+      <div className="text-muted-foreground flex items-center justify-between border-t px-5 py-4 text-sm">
         <div>Characters: {inputText.length}</div>
         <Button
           onClick={handleTranslate}
@@ -64,9 +66,15 @@ export function TranslationInput(): JSX.Element {
           className=""
         >
           {isTranslating ? (
-            <div className="border-background border-t-foreground animate-spin rounded-full border-2" />
+            <>
+              <IconLoader2 className="animate-spin" />
+              Translating...
+            </>
           ) : (
-            <>Translate (⌘+Enter)</>
+            <>
+              <IconSend />
+              Translate (⌘↵)
+            </>
           )}
         </Button>
       </div>

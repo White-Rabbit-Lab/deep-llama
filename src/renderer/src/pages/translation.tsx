@@ -77,9 +77,7 @@ export function TranslationPage(): JSX.Element {
             <div className="border-b px-2 py-2">
               <LanguageSelector type="target" />
             </div>
-            <div className="flex-1 p-4">
-              <TranslationOutput />
-            </div>
+            <TranslationOutput />
           </div>
         </div>
       </main>
