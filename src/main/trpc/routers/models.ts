@@ -41,13 +41,41 @@ export const modelsRouter = router({
         lastUsed: new Date(),
       };
 
-      const settings = await settingsRepository.addModel(model);
+      // Ensure atomicity: perform both operations as a single transaction
+      let addedModel = false;
+      try {
+        // Step 1: Add the model
+        const settings = await settingsRepository.addModel(model);
+        addedModel = true;
 
-      if (input.makeDefault) {
-        return await settingsRepository.setDefaultModel(input.name);
+        // Step 2: If makeDefault is true, set it as default
+        if (input.makeDefault) {
+          return await settingsRepository.setDefaultModel(input.name);
+        }
+
+        return settings;
+      } catch (error) {
+        // If we successfully added the model but failed at step 2,
+        // clean up by removing the model to maintain system consistency
+        if (addedModel && input.makeDefault) {
+          try {
+            await settingsRepository.removeModel(input.name);
+            console.warn(
+              `Rolled back model "${input.name}" due to failed default setting`,
+            );
+          } catch (cleanupError) {
+            console.error(
+              `Critical: Failed to rollback model "${input.name}" after default setting failed. Manual intervention may be required.`,
+              cleanupError,
+            );
+            // Re-throw the original error with additional context
+            throw new Error(
+              `Model operation failed and cleanup failed. System may be in inconsistent state. Original error: ${error instanceof Error ? error.message : String(error)}`,
+            );
+          }
+        }
+        throw error;
       }
-
-      return settings;
     }),
 
   removeModel: publicProcedure
