@@ -72,6 +72,7 @@ export class TranslationServiceImpl implements TranslationService {
         sourceLanguage,
         targetLanguage,
         modelName,
+        this.activeController.signal,
       );
 
       // Update model usage
@@ -150,6 +151,7 @@ export class TranslationServiceImpl implements TranslationService {
     sourceLanguage: SupportedLanguage,
     targetLanguage: SupportedLanguage,
     modelName: string,
+    signal?: AbortSignal,
   ): Promise<string> {
     const prompt = this.createTranslationPrompt(
       text,
@@ -172,6 +174,7 @@ export class TranslationServiceImpl implements TranslationService {
       ],
       stream: false,
       temperature: 0.3, // Lower temperature for more consistent translations
+      signal,
     });
 
     return response.trim();

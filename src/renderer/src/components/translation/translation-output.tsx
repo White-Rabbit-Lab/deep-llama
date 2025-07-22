@@ -38,8 +38,6 @@ export function TranslationOutput(): JSX.Element {
     return languageNames[manualTargetLanguage];
   };
 
-  
-
   return (
     <div className="flex h-full flex-col">
       {/* Translation Output Area */}

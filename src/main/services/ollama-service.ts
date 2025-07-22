@@ -132,7 +132,8 @@ export class OllamaServiceImpl implements OllamaService {
         throw error;
       }
 
-      const response = await this.ollama.chat({
+      // Handle abort signal by racing with a rejected promise
+      const chatPromise = this.ollama.chat({
         model: request.model,
         messages: request.messages,
         stream: false,
@@ -141,6 +142,17 @@ export class OllamaServiceImpl implements OllamaService {
           top_p: request.top_p,
         },
       });
+
+      const response = request.signal
+        ? await Promise.race([
+            chatPromise,
+            new Promise<never>((_, reject) => {
+              request.signal!.addEventListener("abort", () => {
+                reject(new Error("Translation aborted by user"));
+              });
+            }),
+          ])
+        : await chatPromise;
 
       await this.updateConnectionStatus("connected");
       return response.message.content;
@@ -167,7 +179,8 @@ export class OllamaServiceImpl implements OllamaService {
         throw error;
       }
 
-      const stream = await this.ollama.chat({
+      // Handle abort signal by racing with a rejected promise
+      const chatStreamPromise = this.ollama.chat({
         model: request.model,
         messages: request.messages,
         stream: true,
@@ -176,6 +189,17 @@ export class OllamaServiceImpl implements OllamaService {
           top_p: request.top_p,
         },
       });
+
+      const stream = request.signal
+        ? await Promise.race([
+            chatStreamPromise,
+            new Promise<never>((_, reject) => {
+              request.signal!.addEventListener("abort", () => {
+                reject(new Error("Translation stream aborted by user"));
+              });
+            }),
+          ])
+        : await chatStreamPromise;
 
       await this.updateConnectionStatus("connected");
 

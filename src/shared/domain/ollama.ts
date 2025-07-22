@@ -34,6 +34,7 @@ export const OllamaChatRequest = z.object({
   stream: z.boolean().default(false),
   temperature: z.number().min(0).max(2).optional(),
   top_p: z.number().min(0).max(1).optional(),
+  signal: z.instanceof(AbortSignal).optional(),
 });
 export type OllamaChatRequest = z.infer<typeof OllamaChatRequest>;
 
