@@ -297,11 +297,25 @@ export const useTranslationStore = create<TranslationState>()(
 
     initialize: async () => {
       // Initialize all data
-      await Promise.all([
-        get().refreshModels(),
-        get().refreshOllamaModels(),
-        get().checkConnection(),
-      ]);
+      try {
+        await Promise.all([
+          get().refreshModels(),
+          get().refreshOllamaModels(),
+          get().checkConnection(),
+        ]);
+      } catch (error) {
+        console.error("Failed to initialize translation store:", error);
+
+        // Set error state to indicate initialization failure
+        set({
+          translationError:
+            "Failed to initialize application. Please check your connection and try again.",
+          connectionStatus: "error",
+        });
+
+        // Re-throw to allow calling code to handle the failure if needed
+        throw error;
+      }
     },
   })),
 );
