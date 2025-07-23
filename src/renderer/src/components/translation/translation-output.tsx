@@ -1,4 +1,4 @@
-import { IconCopy, IconCopyCheck } from "@tabler/icons-react";
+import { IconCopy, IconCopyCheck, IconLoader2 } from "@tabler/icons-react";
 import type { JSX } from "react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -33,7 +33,7 @@ export function TranslationOutput(): JSX.Element {
         {isTranslating ? (
           <div className="flex h-full items-center justify-center">
             <div className="text-muted-foreground flex items-center space-x-2">
-              <div className="border-primary h-5 w-5 animate-spin rounded-full border-b-2"></div>
+              <IconLoader2 className="animate-spin" />
               <span>Translating...</span>
             </div>
           </div>
