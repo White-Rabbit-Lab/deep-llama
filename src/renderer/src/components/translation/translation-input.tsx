@@ -47,13 +47,6 @@ export function TranslationInput(): JSX.Element {
           className="h-full resize-none rounded-none border-0 text-base shadow-none focus-visible:ring-0"
           disabled={isTranslating}
         />
-
-        {/* Loading indicator */}
-        {isTranslating && (
-          <div className="absolute top-4 right-4">
-            <div className="border-primary h-4 w-4 animate-spin rounded-full border-b-2"></div>
-          </div>
-        )}
       </div>
 
       {/* Status Bar */}
