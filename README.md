@@ -1,6 +1,6 @@
 # DeepLlama
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/sotayamashita/DeepLlama) [![CI](https://github.com/sotayamashita/DeepLlama/actions/workflows/ci.yml/badge.svg)](https://github.com/sotayamashita/DeepLlama/actions/workflows/ci.yml)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/White-Rabbit-Lab/deep-llama) [![CI](https://github.com/sotayamashita/DeepLlama/actions/workflows/ci.yml/badge.svg)](https://github.com/sotayamashita/DeepLlama/actions/workflows/ci.yml)
 
 A desktop translation application powered by Ollama LLMs, built with Electron, React, and TypeScript. DeepLlama provides a translation using local language models for privacy and offline capability.
 
